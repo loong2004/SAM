@@ -5,8 +5,9 @@ MIHOMO_PATH="$MODULE_PATH/etc/mihomo"
 # Mihomo 配置
 MIHOMO_CONF="$MIHOMO_PATH/config.yaml"
 
-# 加载配置
-. /data/adb/modules/SAM/setting.conf
+# 获取备份设置
+BACKUP_CONF=$(cat "$MODULE_PATH/setting.conf" | grep "BACKUP_CONF=" | sed "s/BACKUP_CONF=//g")
+
 
 # 判断已启用备份并且配置文件存在
 if [ -e $MIHOMO_CONF ] && [ $BACKUP_CONF = true ]; then

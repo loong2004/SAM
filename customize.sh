@@ -38,7 +38,7 @@ update_conf(){
     # 更新模块的配置文件路径
     t="$MODPATH/setting.conf"
     # 需要更新的配置
-    #conf_array=("AGH_ENABLE" "AGH_DNS_PORT" "AGH_USER" "AGH_GROUP" "BLOCK_IPV6_DNS" "SMARTDNS_ENABLE" "TUN_DEVICE" "HOST_ENABLE" "BACKUP_CONF" "SUB_URL" "BLACKLIST_PACKAGE")
+    #conf_array=("AGH_ENABLE" "AGH_DNS_PORT" "AGH_USER" "AGH_GROUP" "BLOCK_IPV6_DNS" "SMARTDNS_ENABLE" "TUN_DEVICE" "HOST_ENABLE" "CRONTAB_ENABLE" "BACKUP_CONF" "SUB_URL" "BLACKLIST_PACKAGE")
     # 循环执行查找并替换
     #for i in ${!conf_array[@]}
     #do
@@ -52,6 +52,7 @@ update_conf(){
     modify_conf "$s" "$t" "SMARTDNS_ENABLE"
     modify_conf "$s" "$t" "TUN_DEVICE"
     modify_conf "$s" "$t" "HOST_ENABLE"
+    modify_conf "$s" "$t" "CRONTAB_ENABLE"
     modify_conf "$s" "$t" "BACKUP_CONF"
     modify_conf "$s" "$t" "SUB_URL"
     modify_conf "$s" "$t" "BLACKLIST_PACKAGE"
@@ -62,6 +63,7 @@ unzip -o "$ZIPFILE" "module.prop" -d "$MODPATH" >/dev/null 2>&1
 unzip -o "$ZIPFILE" "service.sh" -d "$MODPATH" >/dev/null 2>&1
 unzip -o "$ZIPFILE" "setting.conf" -d "$MODPATH" >/dev/null 2>&1
 unzip -o "$ZIPFILE" "uninstall.sh" -d "$MODPATH" >/dev/null 2>&1
+unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >/dev/null 2>&1
 unzip -o "$ZIPFILE" "tmp/*" -d "$MODPATH" >/dev/null 2>&1
 
 ui_print "📥 解压脚本文件"
@@ -78,6 +80,9 @@ unzip -o "$ZIPFILE" "etc/mihomo/*" -d "$MODPATH" >/dev/null 2>&1
 
 ui_print "📥 解压 SmartDNS 文件"
 unzip -o "$ZIPFILE" "etc/SmartDNS/*" -d "$MODPATH" >/dev/null 2>&1
+
+ui_print "📥 解压 crontabs 文件"
+unzip -o "$ZIPFILE" "etc/crontabs/*" -d "$MODPATH" >/dev/null 2>&1
 
 ui_print "📥 解压 hosts 文件"
 unzip -o "$ZIPFILE" "etc/hosts" -d "$MODPATH" >/dev/null 2>&1
@@ -97,7 +102,9 @@ if [ -e "$MODULE_PATH/setting.conf" ]; then
     cp -f "$copy_path/mihomo/cache.db" "$MIHOMO_PATH/cache.db"
     cp -rf "$copy_path/mihomo/rule_provider/." "$MIHOMO_PATH/rule_provider/"
     cp -rf "$copy_path/mihomo/proxy_provider/." "$MIHOMO_PATH/proxy_provider/"
-    cp -f "$copy_path/SmartDNS/smartdns.cache" "$SMARTDNS_PATH/smartdns.cache"
+    cp -f "$copy_path/SmartDNS/smartdns.cache" "$SMARTDNS_PATH/smartdns.cache"    
+    cp -f "$copy_path/crontabs/root" "$MODPATH/etc/crontabs/root"    
+    cp -f "$copy_path/hosts" "$MODPATH/etc/hosts"
 fi
 
 # 设置权限

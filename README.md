@@ -12,6 +12,10 @@
 3. /data/adb/modules/SAM/etc/mihomo/base.yaml 配置文件禁止随意修改或删除
 4. /data/adb/modules/SAM/etc/hosts 文件修改实时生效
 
+## 2025.11.18
+1. 添加定时执行功能
+2. 给模块添加 WebUI
+
 ## 2025.11.17
 1. 重新调整模块架构
 2. 添加 Host 规则

@@ -28,7 +28,8 @@ rm -rf $MODULE_PATH/disable
 host_status=$(cat "/data/adb/modules/SAM/setting.conf" | grep "HOST_ENABLE=" | sed "s/HOST_ENABLE=//g")
 # 判断 host 启用则执行
 if [ "$host_status" = true ]; then
-    $SCRIPTS_PATH/host.sh -l "启用 Host"
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[$time]: 启用 Host" >> "$MODULE_PATH/tmp/host.log"
     # 获取 GitHub 加速
     $SCRIPTS_PATH/host.sh gh
     # 模块 hosts 文件路径
@@ -37,8 +38,15 @@ if [ "$host_status" = true ]; then
     SYSTEM_HOSTS="/system/etc/hosts"
     # 挂载 hosts 文件
     mount -o bind "$HOSTS_FILE" "$SYSTEM_HOSTS"    
-    $SCRIPTS_PATH/host.sh -l "挂载 host 文件"
+    echo "[$time]: 挂载 host 文件" >> "$MODULE_PATH/tmp/host.log"
     # 监控 hosts 文件
     inotifyd $SCRIPTS_PATH/host.inotify.sh "$HOSTS_FILE" &
-    $SCRIPTS_PATH/host.sh -l "监控 hosts 文件" 
+    echo "[$time]: 监控 host 文件" >> "$MODULE_PATH/tmp/host.log"
+fi
+
+# 获取定时是否启用
+crontab_status=$(cat "/data/adb/modules/SAM/setting.conf" | grep "CRONTAB_ENABLE=" | sed "s/CRONTAB_ENABLE=//g")
+# 判断定时启用则执行
+if [ "$crontab_status" = true ]; then
+    busybox crond -c /data/adb/modules/SAM/etc/crontabs/
 fi

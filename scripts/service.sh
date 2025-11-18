@@ -140,6 +140,52 @@ mihomo_stop(){
     [ -z $state_number ] && log "Mihomo 关闭成功" || log "Mihomo 关闭失败"
 }
 
+# 启动 crontabs
+crontabs_start(){
+    # 判断禁用则退出
+    if [ $CRONTAB_ENABLE = false ]; then
+        log "定时执行已禁用"
+        log "如需启用，请修改 setting.conf 文件"
+        return
+    fi
+    # crontabs 状态
+    state_number=$(pgrep -f 'SAM/etc/crontabs')
+    # crontabs 正在运行则退出
+    if [ $state_number ]; then
+        log "crontabs 正在运行"
+        return
+    fi
+    log "启动 crontabs"
+    # 启动
+    busybox crond -c "/data/adb/modules/SAM/etc/crontabs/"
+    # 延时 1秒
+    sleep 1
+    # 输出 crontabs 状态
+    state_number=$(pgrep -f 'SAM/etc/crontabs')
+    [ $state_number ] && log "crontabs 启动成功" || log "crontabs 启动失败"
+    return
+}
+
+# 停止 crontabs
+crontabs_stop(){
+    # crontabs 状态
+    state_number=$(pgrep -f 'SAM/etc/crontabs')
+    # crontabs 没有运行则退出
+    if [ -z $state_number ]; then
+        log "crontabs 已停止运行"
+        return
+    fi
+    log "关闭 crontabs"
+    # 杀死 SmartDNS 进程
+    pid=$(pgrep -f 'SAM/etc/crontabs')
+    kill $pid || kill -9 $pid > /dev/null 2>&1
+    # 延时1秒
+    sleep 1
+    # 输出 SmartDNS 状态
+    state_number=$(pgrep -f 'SAM/etc/crontabs')
+    [ -z $state_number ] && log "crontabs 关闭成功" || log "crontabs 关闭失败"
+}
+
 # 启动
 start(){
     # 判断没有订阅地址则退出
@@ -169,6 +215,8 @@ start(){
     mihomo_start
     # 启动 AdGuardHome
     agh_start 
+    # 启动 crontabs
+    crontabs_start
     # 更新描述
     $SCRIPTS_PATH/update.sh desc   
 }
@@ -181,6 +229,8 @@ stop(){
     mihomo_stop
     # 停止 SmartDNS
     smartdns_stop
+    # 关闭 crontabs
+    crontabs_stop
     # 更新描述
     $SCRIPTS_PATH/update.sh desc
 }
@@ -199,8 +249,24 @@ case "$1" in
         stop
         log "<<< end"
         ;;
+    restart)
+        # 重启
+        log "restart >>>" "restart"    
+            
+        log "stop >"
+        stop
+        log "< stop"
+        
+        sleep 1
+        
+        log "start >"
+        start
+        log "< start"
+        
+        log "<<< end"
+        ;;
     *)
-        echo "使用: start(启动) | stop(停止)"
+        echo "使用: start(启动) | stop(停止) | restart(重启)"
         exit 1
         ;;
 esac
