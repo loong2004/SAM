@@ -24,7 +24,6 @@
  </head>
  <body>
      <h2>SAM WEBUI</h2>
-     
      <!-- SmartDNS 状态 -->
      <div class="card">
          <h3>SmartDNS</h3>
