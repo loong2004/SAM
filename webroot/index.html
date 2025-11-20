@@ -4,13 +4,14 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <style>
          body { font-family: sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
-         .card { background: #fff; padding: 15px 15px 30px 15px; margin: 30px 0; border-radius: 8px; box-shadow: 0 3px 8px #ddd; }
+         h2 { margin: 30px 0 40px 0 }
+         .card { background: #fff; padding: 15px 15px 30px 15px; margin: 0 0 20px; border-radius: 8px; box-shadow: 0 3px 8px #ddd; }
          .card a { text-decoration: none; }
          .status { padding: 8px; border-radius: 4px; font-weight: bold; margin: 5px auto; }
          .running { background: #e6f7ee; color: #00875a; }
          .stopped { background: #fff2f2; color: #e53e3e; }
          .webui { background: #E6EBF7; color: #004887; }
-         .controls { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+         .controls { display: flex; gap: 0.8rem; flex-wrap: wrap; margin: 30px 0 0; }
         .controls button { flex: 1; min-width: 100px; padding: 0.8rem; border: none; border-radius: 8px; background-color: #14233a; color: #ffffff; font-weight: 500; cursor: pointer; box-shadow: 0 3px 3px #eee; transition: all 0.2s; }
         #start { background: #e8f5e9; color: #2e7d32; }
         #stop { background: #ffebee; color: #c62828; }
@@ -40,28 +41,30 @@
      <!-- SmartDNS 状态 -->
      <div class="card">
          <h3>SmartDNS</h3>
-         <div id="smartdns-status" class="status running">已运行</div>
+         <div id="smartdns-status" class="status stopped">未运行</div>
+         <a href="http://127.0.0.1:6080"><div class="status webui">> http://127.0.0.1:6080</div></a>
      </div>
      
      <!-- AdGuardHome 状态 -->
      <div class="card">
          <h3>AdGuardHome</h3>
-         <div id="agh-status" class="status running">已运行</div>
-         <a href="http://127.0.0.1:3000"><div class="status webui">WebUI</div></a>
+         <div id="agh-status" class="status stopped">未运行</div>
+         <a href="http://127.0.0.1:3000"><div class="status webui">> http://127.0.0.1:3000</div></a>
      </div>
      
      <!-- Mihomo 状态 -->
      <div class="card">
          <h3>Mihomo</h3>
-         <div id="mihomo-status" class="status running">已运行</div>
-         <a href="http://127.0.0.1:9090/ui/"><div class="status webui">WebUI</div></a>
+         <div id="mihomo-status" class="status stopped">未运行</div>
+         <a href="http://127.0.0.1:9090/ui/"><div class="status webui">> http://127.0.0.1:9090/ui/</div></a>
      </div>
      
      <div class="controls">
-             <button id="start">启动</button>
-             <button id="stop">停止</button>
-             <button id="restart">重启</button>
+         <button id="start">启动</button>
+         <button id="stop">停止</button>
+         <button id="restart">重启</button>
      </div>
+     
      <div class="toast" id="toast"></div>
  </body>
  </html>

@@ -12,6 +12,12 @@
 3. /data/adb/modules/SAM/etc/mihomo/base.yaml 配置文件禁止随意修改或删除
 4. /data/adb/modules/SAM/etc/hosts 文件修改实时生效
 
+### 2025.11.20
+1. SmartDNS 更新版本
+2. SmartDNS 添加 WebUI
+3. 调整模块的 WebUI 代码
+4. 修复用模块 WebUI 控制启动，导致手机没有网络
+
 ## 2025.11.19
 1. 调整部分代码
 2. 重写 WebUI

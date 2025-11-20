@@ -60,20 +60,28 @@ description(){
     done
     
     # WebUI
-    if [ ${#start_state[@]} -gt 1 ]; then
-        desc_content+="🌎WebUI: [ AdGuardHome(127.0.0.1:3000) ] [ mihomo(127.0.0.1:9090/ui/) ] "
-    elif [ ${#start_state[@]} != 0 ]; then
-        if [ "${start_state[0]}" = "$AGH_BIN" ]; then
-            desc_content+="🌎WebUI: [ AdGuardHome(127.0.0.1:3000) ] "
-        else
-            desc_content+="🌎WebUI: [ mihomo(127.0.0.1:9090/ui/) ] "
-        fi
-    fi
+    #desc_content+="🌎WebUI: "
+    #for i in ${start_state[@]}
+    #do
+        #if [ "$i" = "$AGH_BIN" ]; then
+            #desc_content+="[ AdGuardHome(127.0.0.1:3000) ] "
+        #elif [ "$i" = "$MIHOMO_BIN" ]; then
+            #desc_content+="[ mihomo(127.0.0.1:9090/ui/) ] "
+        #else
+            #desc_content+="[ SmartDNS(127.0.0.1:6080) ] "
+        #fi
+    #done
     
     # 用户和密码
-    if [ "${start_state[0]}" = "$AGH_BIN" ] || [ "${start_state[1]}" = "$AGH_BIN" ]; then
-        desc_content+="🔰AdGuardHome: [ root(账号/密码) ] "
-    fi
+    desc_content+="🔰账号/密码: "
+    for i in ${start_state[@]}
+    do
+        if [ "$i" = "$AGH_BIN" ]; then
+            desc_content+="[ AdGuardHome(root/root) ] "
+        elif [ "$i" = "$SMARTDNS_BIN" ]; then
+            desc_content+="[ SmartDNS(root/root) ] "
+        fi
+    done
     
     # host
     if [ $HOST_ENABLE = true ]; then
@@ -198,39 +206,6 @@ dns(){
     log "DNS 配置修改成功"
 }
 
-# webui 显示状态
-webui_status(){
-    content="$1"
-    state_number=$(pidof $2)       
-    line_number=$(echo "$content" | sed -n -e "/$3/=")
-    if [ $state_number ]; then
-        content=$(echo "$content" | sed $line_number"s/stopped/running/" | sed $line_number"s/未/已/")
-    else
-        content=$(echo "$content" | sed $line_number"s/running/stopped/" | sed $line_number"s/已/未/")
-    fi
-    echo "$content"
-}
-
-# 修改 webui
-webui(){
-    # webui 文件路径
-    html_file="$MODULE_PATH/webroot/index.html"    
-    # 输出内容
-    out_content=$(cat "$html_file")    
-    
-    # 获取 SmartDNS 状态
-    out_content=$(webui_status "$out_content" "$SMARTDNS_BIN" "smartdns-status")
-    
-    # 获取 AdGuardHome 状态    
-    out_content=$(webui_status "$out_content" "$AGH_BIN" "agh-status")
-    
-    # 获取 Mihomo 状态    
-    out_content=$(webui_status "$out_content" "$MIHOMO_BIN" "mihomo-status")
-    
-    # 输出
-    echo "$out_content" > $html_file
-}
-
 # 添加指令
 case "$1" in
     # 配置
@@ -244,7 +219,6 @@ case "$1" in
     desc)
         # 修改模块描述
         description
-        webui
         ;;
     # 订阅
     sub)

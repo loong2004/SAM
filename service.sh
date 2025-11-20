@@ -10,6 +10,13 @@ done
 # 删除日志及缓存文件
 rm -rf "$MODULE_PATH/tmp/*"
 
+# 创建软链接
+if [ ! -e "$MODULE_PATH/bin/smartdns" ]; then
+    ln -s "$MODULE_PATH/etc/SmartDNS/run-smartdns" "$MODULE_PATH/bin/smartdns"
+    ln -s "$MODULE_PATH/etc/SmartDNS/lib/libc.so" "$MODULE_PATH/etc/SmartDNS/lib/ld-musl-arm.so.1"
+    ln -s "$MODULE_PATH/etc/SmartDNS/lib/ld-musl-arm.so.1" "$MODULE_PATH/etc/SmartDNS/lib/ld-linux.so"
+fi
+
 # 启动
 echo "" > $MODULE_PATH/disable
 $SCRIPTS_PATH/service.sh start

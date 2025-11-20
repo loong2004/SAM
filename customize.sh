@@ -102,7 +102,11 @@ if [ -e "$MODULE_PATH/setting.conf" ]; then
     cp -f "$copy_path/mihomo/cache.db" "$MIHOMO_PATH/cache.db"
     cp -rf "$copy_path/mihomo/rule_provider/." "$MIHOMO_PATH/rule_provider/"
     cp -rf "$copy_path/mihomo/proxy_provider/." "$MIHOMO_PATH/proxy_provider/"
-    cp -f "$copy_path/SmartDNS/smartdns.cache" "$SMARTDNS_PATH/smartdns.cache"    
+    if [ -e "$copy_path/SmartDNS/data" ]; then
+        cp -rf "$copy_path/SmartDNS/data/." "$SMARTDNS_PATH/data/"
+    else        
+        cp -f "$copy_path/SmartDNS/smartdns.cache" "$SMARTDNS_PATH/data/smartdns.cache"
+    fi 
     cp -f "$copy_path/crontabs/root" "$MODPATH/etc/crontabs/root"    
     cp -f "$copy_path/hosts" "$MODPATH/etc/hosts"
 fi
@@ -123,13 +127,19 @@ ui_print "🏷️ 创建软链接 $busybox_path > $busybox_bin"
 ui_print "🔒 设置权限 ......"
 chmod +x "$MODPATH/bin/$AGH_BIN"
 chmod +x "$MODPATH/bin/$MIHOMO_BIN"
-chmod +x "$MODPATH/bin/$SMARTDNS_BIN"
+chmod +x "$SMARTDNS_PATH/run-smartdns"
+chmod +x "$SMARTDNS_PATH/smartdns_ui.so"
+chmod +x "$SMARTDNS_PATH/$SMARTDNS_BIN"
+chmod -R +x "$SMARTDNS_PATH/lib/"
 chmod +x "$SCRIPTS_PATH"/*.sh "$MODPATH"/*.sh
 chown root:net_raw "$MODPATH/bin/$AGH_BIN"
 chown root:net_admin "$MODPATH/bin/$MIHOMO_BIN"
-chown root:net_raw "$MODPATH/bin/$SMARTDNS_BIN"
+chown root:net_raw "$SMARTDNS_PATH/run-smartdns"
+chown root:net_raw "$SMARTDNS_PATH/$SMARTDNS_BIN"
 ui_print "🔒 设置权限完成"
 
+ui_print "🌐 SmartDNS ( 账号: root | 密码: root )"
+ui_print "🌐 SmartDNS ( WebUI: 127.0.0.1:6080 )"
 ui_print "🔰 AdGuardHome ( 账号: root | 密码: root )"
 ui_print "🔰 AdGuardHome ( WebUI: 127.0.0.1:3000 )"
 ui_print "✈️ Mihomo ( WebUI: 127.0.0.1:9090/ui/ )"
