@@ -12,6 +12,12 @@
 3. /data/adb/modules/SAM/etc/mihomo/base.yaml 配置文件禁止随意修改或删除
 4. /data/adb/modules/SAM/etc/hosts 文件修改实时生效
 
+## 2025.11.28
+1. 重写模块的 WebUI
+2. 调整部分代码
+3. 黑名单采用双配置，tun规则过滤和路由规则过滤
+4. 黑名单路由规则可手动添加，不会被代码覆盖，文件路径:/data/adb/modules/SAM/etc/mihomo/rule_provider/classical_blacklist_direct.list
+
 ## 2025.11.20
 1. SmartDNS 更新版本
 2. SmartDNS 添加 WebUI

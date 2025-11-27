@@ -13,6 +13,8 @@ blacklist_package(){
     
     # 输出内容
     out_content="空格空格exclude-package:"
+    rule_content=""
+    rule=$(cat "$MIHOMO_PATH/rule_provider/classical_blacklist_direct.list")
     # 获取行号
     line_number=$(cat $MIHOMO_CONF | sed -n -e "/exclude-package:/=")
     
@@ -21,15 +23,18 @@ blacklist_package(){
     # 循环获取包名
     for package in ${BLACKLIST_PACKAGE[@]}
     do
-        log "$package"
+        log "$package"        
         out_content+="\n空格空格空格空格- $package"
+        rule=$(echo "$rule" | grep -v $package)
+        rule_content+="PROCESS-NAME,$package\n"
     done
-    
     log "写入配置"
     
     # 输出配置
     out_content=$(cat $MIHOMO_CONF | sed $line_number"c $out_content" | sed "s/空格/ /g")
-    echo "$out_content" > $MIHOMO_CONF
+    echo "$out_content" > $MIHOMO_CONF 
+    rule+="$rule_content"
+    echo "$rule" > "$MIHOMO_PATH/rule_provider/classical_blacklist_direct.list"
 }
 
 # 添加指令
@@ -39,6 +44,7 @@ case "$1" in
         blacklist_package
         ;;
     *)
+        blacklist_package
         echo "使用: bg(黑名单)"
         exit 1
         ;;

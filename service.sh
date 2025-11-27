@@ -25,9 +25,8 @@ $SCRIPTS_PATH/service.sh start
 
 # 重置
 cat "$MODULE_PATH/module.prop" | sed  -i "6c description=None" "$MODULE_PATH/module.prop"
-cat "$MODULE_PATH/webroot/index.html" | sed "s/status running/status stopped/g" | sed -i "s/已运行/未运行/g" "$MODULE_PATH/webroot/index.html"
 
-# 监控模块目录
+# 监控模块
 inotifyd $SCRIPTS_PATH/inotify.sh "$MODULE_PATH" > /dev/null 2>&1 &
 sleep 3
 rm -rf $MODULE_PATH/disable

@@ -61,6 +61,7 @@ update_conf(){
 ui_print "📥 解压模块基本文件"
 unzip -o "$ZIPFILE" "module.prop" -d "$MODPATH" >/dev/null 2>&1
 unzip -o "$ZIPFILE" "service.sh" -d "$MODPATH" >/dev/null 2>&1
+unzip -o "$ZIPFILE" "action.sh" -d "$MODPATH" >/dev/null 2>&1
 unzip -o "$ZIPFILE" "setting.conf" -d "$MODPATH" >/dev/null 2>&1
 unzip -o "$ZIPFILE" "uninstall.sh" -d "$MODPATH" >/dev/null 2>&1
 unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >/dev/null 2>&1
@@ -127,6 +128,7 @@ ui_print "🏷️ 创建软链接 $busybox_path > $busybox_bin"
 ui_print "🔒 设置权限 ......"
 chmod +x "$MODPATH/bin/$AGH_BIN"
 chmod +x "$MODPATH/bin/$MIHOMO_BIN"
+chmod -R 666 "$MIHOMO_PATH/rule_provider/"
 chmod +x "$SMARTDNS_PATH/run-smartdns"
 chmod +x "$SMARTDNS_PATH/smartdns_ui.so"
 chmod +x "$SMARTDNS_PATH/$SMARTDNS_BIN"

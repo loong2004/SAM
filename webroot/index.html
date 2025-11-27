@@ -1,70 +1,147 @@
 <!DOCTYPE html>
- <html>
- <head>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <style>
-         body { font-family: sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
-         h2 { margin: 30px 0 40px 0 }
-         .card { background: #fff; padding: 15px 15px 30px 15px; margin: 0 0 20px; border-radius: 8px; box-shadow: 0 3px 8px #ddd; }
-         .card a { text-decoration: none; }
-         .status { padding: 8px; border-radius: 4px; font-weight: bold; margin: 5px auto; }
-         .running { background: #e6f7ee; color: #00875a; }
-         .stopped { background: #fff2f2; color: #e53e3e; }
-         .webui { background: #E6EBF7; color: #004887; }
-         .controls { display: flex; gap: 0.8rem; flex-wrap: wrap; margin: 30px 0 0; }
-        .controls button { flex: 1; min-width: 100px; padding: 0.8rem; border: none; border-radius: 8px; background-color: #14233a; color: #ffffff; font-weight: 500; cursor: pointer; box-shadow: 0 3px 3px #eee; transition: all 0.2s; }
-        #start { background: #e8f5e9; color: #2e7d32; }
-        #stop { background: #ffebee; color: #c62828; }
-        #restart { background: #fff8e1; color: #ff8f00; }
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 18px; border-radius: 6px; color: white; font-size: 14px; display: none; }
-         .success { background: #4EA874; }
-         .error { background: #e74c3c; }
-         /* 深色模式 */
-         @media (prefers-color-scheme: dark) {
-             body { background-color: #0C1522; }
-             h2 { color: #ffffff; }
-             .card { background-color: #14233A; box-shadow: 0 3px 8px #050A10; }
-             .card h3 { color: #ffffff; }
-             .running { background: #3D4E45; color: #B3D7C4; }
-             .stopped { background: #4E3D3D; color: #D7B3B3; }
-             .webui { background: #3D424E; color: #B3C0D7; }
-             .controls button { box-shadow: 0 3px 3px #050A10; }
-             #start { background: #283629; color: #DEFFE0; }
-             #stop { background: #362828; color: #FFDEDE; }
-             #restart { background: #363628; color: #FFF4DE; }
-         }
-     </style>
-     <script src="js/main.js" type="module"></script>
- </head>
- <body>
-     <h2>SAM WEBUI</h2>
-     <!-- SmartDNS 状态 -->
-     <div class="card">
-         <h3>SmartDNS</h3>
-         <div id="smartdns-status" class="status stopped">未运行</div>
-         <a href="http://127.0.0.1:6080"><div class="status webui">> http://127.0.0.1:6080</div></a>
-     </div>
-     
-     <!-- AdGuardHome 状态 -->
-     <div class="card">
-         <h3>AdGuardHome</h3>
-         <div id="agh-status" class="status stopped">未运行</div>
-         <a href="http://127.0.0.1:3000"><div class="status webui">> http://127.0.0.1:3000</div></a>
-     </div>
-     
-     <!-- Mihomo 状态 -->
-     <div class="card">
-         <h3>Mihomo</h3>
-         <div id="mihomo-status" class="status stopped">未运行</div>
-         <a href="http://127.0.0.1:9090/ui/"><div class="status webui">> http://127.0.0.1:9090/ui/</div></a>
-     </div>
-     
-     <div class="controls">
-         <button id="start">启动</button>
-         <button id="stop">停止</button>
-         <button id="restart">重启</button>
-     </div>
-     
-     <div class="toast" id="toast"></div>
- </body>
- </html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>挂载管理系统</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/main.js" type="module"></script>
+</head>
+<body>
+    <!-- 提示消息 -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- 页面容器 -->
+    <div class="page-container">
+        <!-- 服务页面 -->
+        <div id="service-page" class="page active">
+            <div class="toolbar">
+                <h2>服务</h2>
+            </div>        
+            <div class="content-section">
+                <h3>SmartDNS</h3>
+                <div class="service-item" data-id="1">
+                    <div class="service-info">
+                        <h4>上游 DNS | 自动分流 </h4>
+                        <div class="service-desc">WebUI: 127.0.0.1:6080 | DNS 端口: 3721</div>
+                        <span id="smartdns-status" class="service-status status-inactive">未运行</span>
+                    </div>
+                    <div class="service-actions">
+                        <a href="http://127.0.0.1:6080" target="_blank">
+                            <button class="action-btn toggle-btn enable">打开</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h3>Mihomo</h3>
+                <div class="service-item" data-id="1">
+                    <div class="service-info">
+                        <h4>中间层 | 网络代理</h4>
+                        <div class="service-desc">WebUI: 127.0.0.1:9090 | 代理端口: 7890</div>
+                        <span id="mihomo-status" class="service-status status-inactive">未运行</span>
+                    </div>
+                    <div class="service-actions">
+                        <a href="http://127.0.0.1:9090/ui/" target="_blank">
+                            <button class="action-btn toggle-btn enable">打开</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h3>AdGuardHome</h3>
+                <div class="service-item" data-id="1">
+                    <div class="service-info">
+                        <h4>下游 DNS | 广告拦截</h4>
+                        <div class="service-desc">WebUI: 127.0.0.1:3000 | DNS 端口: 5300</div>
+                        <span id="agh-status" class="service-status status-inactive">未运行</span>
+                    </div>
+                    <div class="service-actions">
+                        <a href="http://127.0.0.1:3000" target="_blank">
+                            <button class="action-btn toggle-btn enable">打开</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        
+            <!-- 服务控制按钮区域 -->
+            <div class="service-control-buttons">
+                <button class="service-btn start-service">启动服务</button>
+                <button class="service-btn stop-service">停止服务</button>
+                <button class="service-btn restart-service">重启服务</button>
+            </div>
+            
+        </div>
+        
+        <!-- 挂载页面 -->
+        <div id="mount-page" class="page">
+            <div class="toolbar">
+                <h2>挂载</h2>
+            </div>
+            <div class="content-section">
+                <h3>Host</h3>
+                <div class="mount-item" data-id="1">
+                    <div class="mount-info">
+                        <h4>广告拦截 | GitHub加速 | 小米ROM下载加速</h4>
+                        <div class="mount-desc">源路径: /data/adb/modules/SAM/etc/system/etc/hosts </br> 目标路径: /system/etc/hosts</div>
+                        <span id="host-mount-status" class="mount-status status-inactive">未挂载</span>
+                    </div>
+                    <div class="mount-actions">
+                        <button id="host-mount-action" class="action-btn toggle-btn disable">禁用</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 监控页面 -->
+        <div id="monitor-page" class="page">
+            <div class="toolbar">
+                <h2>监控</h2>
+            </div>
+            <div class="content-section">
+                <h3>管理</h3>
+                <div class="monitor-item" data-id="1">
+                    <div class="monitor-info">
+                        <h4>模块</h4>
+                        <div id="module-monitor-pid" class="monitor-desc">PID: null</div>
+                        <span id="module-monitor-status" class="monitor-status status-inactive">未运行</span>
+                    </div>
+                    <div class="monitor-actions">
+                        <button id="module-monitor-action" class="action-btn toggle-btn disable">禁用</button>
+                    </div>
+                </div>
+                
+                <div class="monitor-item" data-id="1">
+                    <div class="monitor-info">
+                        <h4>Host</h4>
+                        <div id="host-monitor-pid" class="monitor-desc">PID: null</div>
+                        <span id="host-monitor-status" class="monitor-status status-inactive">未运行</span>
+                    </div>
+                    <div class="monitor-actions">
+                        <button id="host-monitor-action" class="action-btn toggle-btn disable">禁用</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <a class="nav-item active" data-page="service-page">
+            <div class="nav-icon">⚙️</div>
+            <span>服务</span>
+        </a>
+        <a class="nav-item" data-page="mount-page">
+            <div class="nav-icon">📦</div>
+            <span>挂载</span>
+        </a>
+        <a class="nav-item" data-page="monitor-page">
+            <div class="nav-icon">📊</div>
+            <span>监控</span>
+        </a>
+    </nav>
+</body>
+</html>

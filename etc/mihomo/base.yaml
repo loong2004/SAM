@@ -96,6 +96,7 @@ dns:
     - "RULE-SET:domain_cn"
     - "RULE-SET:domain_Private"
     - "RULE-SET:domain_GoogleFCM"
+    - "RULE-SET:fakeip-filter"
     - "+.3gppnetwork.org"
     - "+.xtracloud.net"
     - "+.market.xiaomi.com"
@@ -276,6 +277,7 @@ proxy-groups:
       - "🛰️ 全球直连"
   - name: "♻️ 自动选择"
     type: url-test
+    exclude-filter: "中州|九州|🇨🇳"
     <<: *A
   - name: "🇬 GitHub"
     <<: *proxy_groups
@@ -309,21 +311,23 @@ proxy-groups:
   - name: "🚫 广告拦截"
     type: select
     proxies:
-      - ⛔️ 拒绝连接
-      - 🌐 DNS劫持
+      - "⛔️ 拒绝连接"
+      - "🌐 DNS劫持"
+      - "🛰️ 全球直连"
       - REJECT-DROP
       - PASS
   - name: "🖥️ WebRTC"
     type: select
     proxies:
-      - ⛔️ 拒绝连接
-      - 🌐 DNS劫持
+      - "⛔️ 拒绝连接"
+      - "🌐 DNS劫持"
+      - "🛰️ 全球直连"
       - REJECT-DROP
       - PASS
   - name: "🛰️ 全球直连"
     type: select
     proxies:
-      - 🇨🇳 九州
+      - "🇨🇳 九州"
   - name: "🇭🇰 香港节点"
     filter: "港|HK|hk|Hong Kong|HongKong|hongkong|深港|🇭🇰"
     <<: *All
@@ -394,7 +398,12 @@ rule-anchor:
   classical: &classical {type: http, behavior: classical, format: text, interval: 86400}
   ip: &ip {type: http, behavior: ipcidr, format: mrs, interval: 86400}
   domain: &domain {type: http, behavior: domain, format: mrs, interval: 86400}
+  domain_text: &domain_text {type: http, behavior: domain, format: text, interval: 86400}
 rule-providers:
+  # 黑名单
+  classical_blacklist_direct:
+    <<: *local
+    path: "./rule_provider/classical_blacklist_direct.list"
   # 自定义直连
   classical_custom_direct:
     <<: *classical
@@ -426,6 +435,22 @@ rule-providers:
     <<: *classical
     path: ./rule_provider/domain_Ads_AWAvenue.list
     url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Surge-RULE-SET.list"
+  # Cats-Team
+  domain_Ads_CatsTeam:
+    <<: *domain
+    path: ./rule_provider/domain_Ads_CatsTeam.mrs
+    url: "https://gp.adrules.top/adrules-mihomo.mrs"
+  # hagezi
+  domain_Ads_hagezi:
+    <<: *domain_text
+    path: ./rule_provider/domain_Ads_hagezi.mrs
+    url: "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt"
+    
+  # fakeip-filter
+  fakeip-filter:
+    <<: *domain
+    url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs"
+    path: "./rule_provider/fakeip-filter.mrs"
 
   # CN 域名
   domain_cn:
@@ -622,14 +647,17 @@ rule-providers:
 rules:
   - "DST-PORT,53,🌐 DNS劫持"
   - "DST-PORT,853,🌐 DNS连接"
-
+  
+  - "RULE-SET,classical_blacklist_direct,🛰️ 全球直连"
   - "RULE-SET,classical_custom_direct,🛰️ 全球直连"
   - "RULE-SET,classical_custom_proxy,🎯 节点选择"
   - "RULE-SET,classical_custom_reject,🚫 广告拦截"
 
   - "RULE-SET,classical_WebRTC,🖥️ WebRTC"
-  - "RULE-SET,domain_Ads_antiad,🚫 广告拦截"
+  # - "RULE-SET,domain_Ads_antiad,🚫 广告拦截"
   - "RULE-SET,domain_Ads_AWAvenue,🚫 广告拦截"
+  - "RULE-SET,domain_Ads_CatsTeam,🚫 广告拦截"
+  - "RULE-SET,domain_Ads_hagezi,🚫 广告拦截"
 
   - "RULE-SET,domain_DouYin,🛰️ 全球直连"
   - "RULE-SET,domain_XiaoHongShu,🛰️ 全球直连"

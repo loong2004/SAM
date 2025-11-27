@@ -6,13 +6,12 @@ MIHOMO_PATH="$MODULE_PATH/etc/mihomo"
 MIHOMO_CONF="$MIHOMO_PATH/config.yaml"
 
 # 获取备份设置
-BACKUP_CONF=$(cat "$MODULE_PATH/setting.conf" | grep "BACKUP_CONF=" | sed "s/BACKUP_CONF=//g")
-
+BACKUP_CONF=$(cat "$MODULE_PATH/setting.conf" | grep "BACKUP_CONF=" | awk -F'=' '{print $2}')
 
 # 判断已启用备份并且配置文件存在
-if [ -e $MIHOMO_CONF ] && [ $BACKUP_CONF = true ]; then
+if [ $BACKUP_CONF = true ]; then
     # 复制配置文件到sd根目录
-    cp "$MIHOMO_CONF" "/storage/emulated/0/Mihomo配置.yaml"
+    cp -f "$MIHOMO_CONF" "/storage/emulated/0/Mihomo配置.yaml"
 fi
 
 [ -d "$MODULE_PATH" ] && rm -rf "$MODULE_PATH"

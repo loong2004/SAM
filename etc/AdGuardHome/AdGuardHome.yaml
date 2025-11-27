@@ -97,16 +97,31 @@ filters:
     url: https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ads-Rule.txt
     name: AWAvenue
     id: 1732747955
-  - enabled: true
+  - enabled: false
     url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_21.txt
     name: 'CHN: anti-AD'
     id: 1756258561
-  - enabled: true
+  - enabled: false
     url: https://easylist-downloads.adblockplus.org/easylistchina.txt
     name: EasylistChina
     id: 1756531603
+  - enabled: true
+    url: https://raw.githubusercontent.com/Cats-Team/AdRules/main/dns.txt
+    name: Cats-Team
+    id: 1763885644
+  - enabled: true
+    url: https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/pro.txt
+    name: hagezi
+    id: 1763885646
 whitelist_filters: []
-user_rules: []
+user_rules:
+  - '# 小米主题'
+  - '@@||thm.market.xiaomi.com^'
+  - '# 小米社区'
+  - '@@||api.vip.miui.com^'
+  - '# 讯飞输入法'
+  - '@@||inputnlp.xfinfr.com^'
+  - '@@||imeclient.openspeech.cn^'
 dhcp:
   enabled: false
   interface_name: ""
@@ -148,7 +163,7 @@ filtering:
   safesearch_cache_size: 1048576
   parental_cache_size: 1048576
   cache_time: 30
-  filters_update_interval: 24
+  filters_update_interval: 0
   blocked_response_ttl: 10
   filtering_enabled: true
   parental_enabled: false
