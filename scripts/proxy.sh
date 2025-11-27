@@ -26,7 +26,7 @@ blacklist_package(){
         log "$package"        
         out_content+="\n空格空格空格空格- $package"
         rule=$(echo "$rule" | grep -v $package)
-        rule_content+="PROCESS-NAME,$package\n"
+        rule_content+="\nPROCESS-NAME,$package"
     done
     log "写入配置"
     
@@ -44,7 +44,6 @@ case "$1" in
         blacklist_package
         ;;
     *)
-        blacklist_package
         echo "使用: bg(黑名单)"
         exit 1
         ;;
