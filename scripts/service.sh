@@ -217,8 +217,10 @@ start(){
     agh_start 
     # 启动 crontabs
     crontabs_start
+    # 屏蔽 app 广告文件
+    $SCRIPT_DIR/ad.sh block
     # 更新描述
-    $SCRIPTS_PATH/update.sh desc   
+    $SCRIPTS_PATH/update.sh desc
 }
 
 # 停止
