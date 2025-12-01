@@ -437,7 +437,7 @@ rule-providers:
   domain_Ads_antiad:
     <<: *domain
     url: "https://anti-ad.net/mihomo.mrs"
-    path: "./rule_provider/domain_Ads_antiad.mrs"
+    path: ./rule_provider/domain_Ads_antiad.mrs
   # 秋风
   domain_Ads_AWAvenue:
     <<: *classical
