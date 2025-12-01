@@ -204,7 +204,7 @@ block_ad(){
     # 判断路径是否为目录
     if [ -d "$1" ]; then
         # 重置为空目录
-        rm -rf "$1"
+        rm -rf "$1" >/dev/null 2>&1
         mkdir -p "$1"
         # 锁定
         chattr +i "$1"

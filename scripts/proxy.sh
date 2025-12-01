@@ -26,15 +26,15 @@ blacklist_package(){
         log "$package"        
         out_content+="\n空格空格空格空格- $package"
         rule=$(echo "$rule" | grep -v $package)
-        rule_content+="\nPROCESS-NAME,$package"
+        rule_content+="PROCESS-NAME,$package\n"
     done
     log "写入配置"
     
     # 输出配置
     out_content=$(cat $MIHOMO_CONF | sed $line_number"c $out_content" | sed "s/空格/ /g")
     echo "$out_content" > $MIHOMO_CONF 
-    rule+="$rule_content"
-    echo "$rule" > "$MIHOMO_PATH/rule_provider/classical_blacklist_direct.list"
+    rule_content+="$rule"
+    echo "$rule_content" > "$MIHOMO_PATH/rule_provider/classical_blacklist_direct.list"
 }
 
 # 添加指令

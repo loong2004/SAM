@@ -1,7 +1,5 @@
-# 加载设置
-. /data/adb/modules/SAM/setting.conf
-# 加载配置
-. /data/adb/modules/SAM/scripts/config.sh
+# 加载基础脚本
+. /data/adb/modules/SAM/scripts/base.sh
 
 # 获取 GitHub520 
 get_GitHub520(){    
@@ -36,28 +34,20 @@ get_GitHub520(){
     
     log "读取成功"
     
-    # 写入 hosts 文件  
-    cat "$HOSTS_PATH" | grep -i -v "github" | sed '$a END' | sed -i "s/END/$host_content\n/" "$HOSTS_PATH"
+    # 写入 hosts 文件
+    host_content=$(cat $HOSTS_PATH | grep -i -v "github" | sed '$a END' | sed "s/END/$host_content\n/")
+    echo "$host_content" > $HOSTS_PATH
     
     log "写入 hosts 文件"        
-}
-
-# 日志
-log(){
-    time=$(date "+%Y-%m-%d %H:%M:%S")
-    echo $1
-    echo "[$time]: $1" >> "$MODULE_PATH/tmp/host.log"
 }
 
 # 添加指令
 case "$1" in
     # GitHub520
     gh)
+        log "host >>>"
         get_GitHub520
-        ;;
-    # 日志
-    -l)
-        log "$2"
+        log "<<< end"
         ;;
     *)
         echo "使用: gh(GitHub加速) | -l(日志)"

@@ -32,13 +32,11 @@ sleep 3
 rm -rf $MODULE_PATH/disable
 
 # 获取 Host 状态
-host_status=$(cat "$MODULE_PATH/setting.conf" | grep "HOST_ENABLE=" | sed "s/HOST_ENABLE=//g")
+host_status=$(cat "$MODULE_PATH/setting.conf" | grep "HOST_ENABLE=" | awk -F'=' '{print $2}')
 # 判断 host 启用则执行
 if [ "$host_status" = true ]; then
     time=$(date "+%Y-%m-%d %H:%M:%S")
     echo "[$time]: 启用 Host" >> "$MODULE_PATH/tmp/host.log"
-    # 获取 GitHub 加速
-    $SCRIPTS_PATH/host.sh gh
     # 模块 hosts 文件路径
     HOSTS_FILE="$MODULE_PATH/etc/hosts"
     # 系统 hosts 文件路径
@@ -47,7 +45,7 @@ if [ "$host_status" = true ]; then
     mount -o bind "$HOSTS_FILE" "$SYSTEM_HOSTS"    
     echo "[$time]: 挂载 host 文件" >> "$MODULE_PATH/tmp/host.log"
     # 监控 hosts 文件
-    inotifyd $SCRIPTS_PATH/host.inotify.sh "$HOSTS_FILE" &
+    inotifyd $SCRIPTS_PATH/host.inotify.sh $HOSTS_FILE &
     echo "[$time]: 监控 host 文件" >> "$MODULE_PATH/tmp/host.log"
 fi
 
