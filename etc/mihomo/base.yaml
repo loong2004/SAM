@@ -443,7 +443,7 @@ rule-providers:
   # hagezi
   domain_Ads_hagezi:
     <<: *domain_text
-    path: ./rule_provider/domain_Ads_hagezi.mrs
+    path: ./rule_provider/domain_Ads_hagezi.txt
     url: "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt"
     
   # fakeip-filter
